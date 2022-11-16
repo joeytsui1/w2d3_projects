@@ -3,6 +3,11 @@ class Board
         @grid = Array.new(num) {Array.new(num, "_")}
     end
 
+    def [](pos)
+        row, col = pos
+        @grid[row][col]
+    end
+    
     def valid?(pos)
         row = pos[0]
         col = pos[1]
@@ -54,23 +59,39 @@ class Board
         return false
     end
 
+    # def win_diagonal?(mark)
+    #     left_diag = []
+    #     right_diag = []
+
+    #     @grid.each_with_index do |row, i|
+    #         left_diag = (0..@grid[i].length).map {|ele|@grid[i][i]}
+    #         right_diag = (0..@grid[i].length).map {|ele|@grid[i][-i-1]}
+    #     end
+
+    #     if left_diag.all? {|ele| ele == mark} || right_diag.all? {|ele| ele == mark}
+    #         return true
+    #     end
+    #     return false
+    # end
+
     def win_diagonal?(mark)
-        left_diag = []
-        right_diag = []
-
-        @grid.each_with_index do |row, i|
-            left_diag = (0..@grid[i].length).map {|ele|@grid[i][i]}
-            right_diag = (0..@grid[i].length).map {|ele|@grid[i][-i-1]}
+        left_to_right = (0...@grid.length).all? do |i|
+            pos = [i, i]
+            self[pos] == mark
         end
 
-        if left_diag.all? {|ele| ele == mark} || right_diag.all? {|ele| ele == mark}
-            return true
+        right_to_left = (0...@grid.length).all? do |i|
+            row = i
+            col = @grid.length - 1 - i
+            pos = [row, col]
+            self[pos] == mark
         end
-        return false
+
+        left_to_right || right_to_left
     end
 
     def win?(mark)
-        win_row?(mark) || win_col?(row) || win_diagonal?(mark)
+        win_row?(mark) || win_col?(mark) || win_diagonal?(mark)
     end
 
     def empty_posiitions?

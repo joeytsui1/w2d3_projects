@@ -1,4 +1,5 @@
 class HumanPlayer
+    attr_accessor :mark
     def initialize (mark_value)
         @mark = mark_value
     end
