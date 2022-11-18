@@ -1,5 +1,5 @@
 class Board
-  def self.print_grid(grid)
+  def self.print_grid (grid)
     grid.each do |row|
       puts row.join(" ")
     end
@@ -7,7 +7,7 @@ class Board
   attr_reader :size
   def initialize (num)
     @grid = Array.new(num) {Array.new(num, :N)}
-    @size = num * num 
+    @size = num * num
   end
 
   def [](pos)
@@ -21,13 +21,13 @@ class Board
   end
 
   def num_ships
-    @grid.flatten.count {|ele| ele == :S}
+    @grid.flatten.count {|ele| ele == :S }
   end
 
   def attack (pos)
     if self[pos] == :S 
       self[pos] = :H
-      puts "you sunk my battleship"
+      puts "you have sunken my battleship"
       return true
     else
       self[pos] = :X 
@@ -35,15 +35,12 @@ class Board
     end
   end
 
-  
   def place_random_ships
-    max_ship = @size * 0.25
-
-    while max_ship > self.num_ships
+    max_ships = @size * 0.25
+    while max_ships > self.num_ships
       row = rand(0...@grid.length)
       col = rand(0...@grid.length)
-
-      pos = [row,col]
+      pos = [row, col]
       self[pos] = :S
     end
   end
@@ -51,15 +48,15 @@ class Board
   def hidden_ships_grid
     arr = []
     @grid.each do |row|
-      subarray = []
+      sub = []
       row.each do |ele|
-        if ele == :S
-          subarray << :N 
+        if ele == :S 
+          sub << :N 
         else
-          subarray << ele
+          sub << ele
         end
       end
-      arr << subarray
+      arr << sub
     end
     return arr
   end
@@ -69,6 +66,6 @@ class Board
   end
 
   def print
-    Board::print_grid(self.hidden_ships_grid)
+    Board::print_grid(hidden_ships_grid)
   end
 end
