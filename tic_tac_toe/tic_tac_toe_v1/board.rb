@@ -1,74 +1,63 @@
 class Board
-    def initialize 
+    def initialize
         @grid = Array.new(3) {Array.new(3, "_")}
-    
     end
 
     def [](pos)
         row, col = pos
-        @grid[row][col] 
+        @grid[row][col]
     end
 
-    def []=(pos, val)
+    def []= (pos, val)
         row, col = pos
         @grid[row][col] = val
     end
 
-    def valid?(pos)
-        row, col = pos
-
-        self[pos] != nil && (row >= 0 && col >= 0)
+    def valid? (pos)
+        row , col = pos
+        @grid[row] != nil && self[pos] != nil && (row >= 0 && col >= 0)
     end
 
     def empty?(pos)
         self[pos] == "_"
     end
 
-    def place_mark (pos, mark)
+    def place_mark(pos, mark)
         if valid?(pos) && empty?(pos)
             self[pos] = mark
+            return true
         else
-            raise 
-        end
-    end
-
-    def print
-        @grid.each do |row|
-            puts row.join(" ")
+            raise
         end
     end
 
     def win_row?(mark)
-        @grid.any? do |row|
-            row.all? {|ele| ele == mark}
-        end
+        @grid.any? {|row| row.all? {|ele| ele == mark}}
     end
 
-    def win_col?(mark)
-        @grid.transpose.any? do |row|
-            row.all? {|ele| ele == mark}
-        end
+    def win_column?(mark)
+        @grid.transpose.any? {|col| col.all?{|ele| ele == mark}}
     end
 
     def win_diagonal?(mark)
         left_diag = []
         right_diag = []
 
-        @grid.each_with_index do |ele1 , i|
+        @grid.each_with_index do |ele1, i|
             @grid[i].each_with_index do |ele2, j|
-                left_diag = (0...@grid.length).map {|i| @grid[i][i]}
+                left_diag = (0...@grid.length).map {|i| @grid[i][i] }
                 right_diag = (0...@grid.length).map {|i| @grid[i][-1-i]}
             end
         end
 
-        if left_diag.all?{|ele| ele == mark} || right_diag.all?{|ele| ele == mark} 
+        if left_diag.all? {|ele| ele == mark} || right_diag.all? {|ele| ele == mark}
             return true
         end
         return false
     end
 
     def win?(mark)
-        win_row?(mark) || win_col?(mark) || win_diagonal?(mark)
+        win_row?(mark) || win_column?(mark) || win_diagonal?(mark)
     end
 
     def empty_positions?
@@ -80,5 +69,11 @@ class Board
             end
         end
         return false
+    end
+
+    def print
+        @grid.each do |row|
+            puts row.join(' ')
+        end
     end
 end
