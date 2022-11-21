@@ -3,15 +3,14 @@ require_relative "human_player"
 
 class Game
 
-    attr_reader :current_player, :board
-    def initialize (p1_mark, p2_mark)
+    def initialize(p1_mark, p2_mark)
         @player_1 = HumanPlayer.new(p1_mark)
         @player_2 = HumanPlayer.new(p2_mark)
-        @current_player= @player_1
+        @current_player = @player_1
         @board = Board.new
     end
 
-    def switch_player
+    def switch_turn
         if @current_player == @player_1
             @current_player = @player_2
         else
@@ -25,9 +24,9 @@ class Game
             pos = @current_player.get_position
             @board.place_mark(pos, @current_player.mark)
             if @board.win?(@current_player.mark)
-                return "you win"
+                return "victory"
             else
-                switch_player
+                switch_turn
             end
         end
         return "draw"

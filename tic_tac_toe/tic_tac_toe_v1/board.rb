@@ -1,5 +1,5 @@
 class Board
-    def initialize
+    def initialize 
         @grid = Array.new(3) {Array.new(3, "_")}
     end
 
@@ -8,14 +8,15 @@ class Board
         @grid[row][col]
     end
 
-    def []=(pos, val)
+    def []= (pos, val)
         row, col = pos
         @grid[row][col] = val
     end
 
     def valid?(pos)
         row, col = pos
-        self[pos] != nil && @grid[row] != nil
+
+        @grid[row] != nil && self[pos] != nil && (row >= 0 && col >= 0)
     end
 
     def empty?(pos)
@@ -31,42 +32,32 @@ class Board
         end
     end
 
-    def print 
+    def print
         @grid.each do |row|
             puts row.join(" ")
         end
     end
 
-    def win_row?(mark)
-        @grid.any? {|row| row.all? {|ele| ele == mark}}
+    def win_row? (mark)
+        @grid.any? {|row| row.all?{|ele| ele == mark}}
     end
 
     def win_col?(mark)
-        @grid.transpose.any? {|row| row.all?{|ele| ele == mark}}
+        @grid.transpose.any? {|col| col.all? {|ele| ele == mark}}
     end
 
     def win_diagonal?(mark)
         left_diag = (0...@grid.length).map {|i| @grid[i][i]}
         right_diag = (0...@grid.length).map {|i| @grid[i][-1-i]}
 
-        if left_diag.all? {|ele| ele == mark} || right_diag.all? {|ele| ele == mark}
-            return true 
-        end
-        return false
+        left_diag.all? {|ele| ele == mark} || right_diag.all? {|ele| ele == mark} 
     end
 
     def win?(mark)
-        win_row?(mark) || win_col?(mark) || win_diagonal?(mark)
+        win_col?(mark) || win_diagonal?(mark) || win_row?(mark)
     end
 
     def empty_positions?
-        @grid.each do |row|
-            row.each do |ele|
-                if ele == "_"
-                    return true
-                end
-            end
-        end
-        return false
+        @grid.any? {|row| row.any? {|ele| ele == "_"}}
     end
 end
